@@ -22,9 +22,10 @@ class CreatePropertiesTable extends Migration
             $table->boolean('purchased');
             $table->decimal('value', 11, 2);
             $table->integer('discount');
-            $table->integer('owner_id');
+            $table->foreignId('owner_id')->constrained('users');
             $table->boolean('expired');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
