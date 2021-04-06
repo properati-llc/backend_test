@@ -20,7 +20,9 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        return response()->json(['message' => 'oi'], 200);
+        $properties = $this->service->getAll();
+
+        return response()->json($properties, 200);
     }
 
     /**
@@ -42,7 +44,9 @@ class PropertyController extends Controller
      */
     public function show($id)
     {
-        //
+        $property = $this->service->getOne($id);
+        
+        return response()->json($property, 200);
     }
 
     /**

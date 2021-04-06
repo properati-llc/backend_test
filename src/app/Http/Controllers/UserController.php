@@ -20,7 +20,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->json(['message' => 'Hi'], 200);
+        $users = $this->service->getAll();
+
+        return response()->json($users, 200);
     }
 
     /**
@@ -42,7 +44,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = $this->service->getOne($id);
+        
+        return response()->json($user, 200);
     }
 
     /**
