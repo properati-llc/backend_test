@@ -2,7 +2,7 @@
 
 namespace App\Services\Interfaces;
 
-interface PropertyInterface
+interface PropertyInterface extends ServiceInterface
 {
     
 }
