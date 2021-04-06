@@ -21,7 +21,7 @@ class PropertyService implements PropertyInterface
         return $this->model->all();
     }
 
-    public function getOne(int $id): object
+    public function getOne(int $id): ?object
     {
         return $this->model->find($id);
     }
@@ -32,6 +32,9 @@ class PropertyService implements PropertyInterface
         
         if(!$id) {
             $data['created_at'] = Carbon::now();
+            $data['purchased'] = false;
+            $data['expired'] = false;
+
             $property = $this->model::create($data);
             $return = $property['id'];
         } else {

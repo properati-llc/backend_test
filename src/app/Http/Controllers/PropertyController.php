@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\PropertyInterface;
 use App\Services\Interfaces\UserInterface;
+use Illuminate\Support\Facades\Validator;
 
 class PropertyController extends Controller
 {
@@ -44,6 +45,11 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
+        $validation = $this->dataValidation($request);
+        if($validation) {
+            return $validation;
+        }
+
         $return = [
             'http_code' => 201,
             'message' => 'Property saved successfully'
@@ -88,6 +94,11 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validation = $this->dataValidation($request);
+        if($validation) {
+            return $validation;
+        }
+
         $return = [
             'http_code' => 200,
             'message' => 'Property updated successfully'
@@ -121,5 +132,35 @@ class PropertyController extends Controller
         }
 
         return response()->json([], $return['http_code']);
+    }
+
+    /**
+     * Validation for data passed
+     * 
+     * @param Request $request
+     * @return bool
+     */
+    public function dataValidation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'address' => 'required',
+            'bedrooms' => 'required',
+            'bathrooms' => 'required',
+            'total_area' => 'required',
+            'value' => 'required',
+            'discount' => 'required',
+            'owner_id' => 'required|exists:App\Models\User,id'
+        ]);
+
+        if($validator->fails()) {
+            $return = [
+                'http_code' => 400,
+                'data' => $validator->errors()
+            ];
+
+            return response()->json($return, $return['http_code']);
+        }
+
+        return false;
     }
 }

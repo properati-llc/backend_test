@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\Interfaces\UserInterface;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -41,6 +42,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $validation = $this->dataValidation($request);
+        if($validation) {
+            return $validation;
+        }
+
         $return = [
             'http_code' => 201,
             'message' => 'User saved successfully'
@@ -85,6 +91,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validation = $this->dataValidation($request);
+        if($validation) {
+            return $validation;
+        }
+
         $return = [
             'http_code' => 200,
             'message' => 'User updated successfully'
@@ -118,5 +129,30 @@ class UserController extends Controller
         }
 
         return response()->json([], $return['http_code']);
+    }
+
+    /**
+     * Validation for data passed
+     * 
+     * @param Request $request
+     * @return bool
+     */
+    public function dataValidation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users'
+        ]);
+
+        if($validator->fails()) {
+            $return = [
+                'http_code' => 400,
+                'data' => $validator->errors()
+            ];
+
+            return response()->json($return, $return['http_code']);
+        }
+
+        return false;
     }
 }

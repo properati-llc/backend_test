@@ -21,7 +21,7 @@ class UserService implements UserInterface
         return $this->model->all();
     }
 
-    public function getOne(int $id): object
+    public function getOne(int $id): ?object
     {
         return $this->model->find($id);
     }
