@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\Interfaces\PropertyInterface;
+use App\Services\Interfaces\UserInterface;
 
 class PropertyController extends Controller
 {
     private $service;
+    private $userService;
 
-    public function __construct(PropertyInterface $propertyService)
+    public function __construct(PropertyInterface $propertyService, UserInterface $userInterface)
     {
         $this->service = $propertyService;
+        $this->userService = $userInterface;
     }
     /**
      * Display a listing of the resource.
@@ -20,9 +23,17 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        $properties = $this->service->getAll();
+        $return = [
+            'http_code' => 200
+        ];
 
-        return response()->json($properties, 200);
+        try {
+            $return['data'] = $this->service->getAll();
+        } catch(\Exception $e) {
+            $return = parent::errorMessage($e->getCode());
+        }
+
+        return response()->json($return, $return['http_code']);
     }
 
     /**
@@ -33,7 +44,18 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $return = [
+            'http_code' => 201,
+            'message' => 'Property saved successfully'
+        ];
+
+        try {
+            $this->service->save($request->all());
+        } catch(\Exception $e) {    
+            $return = parent::errorMessage($e->getMessage());   
+        }
+
+        return response()->json($return, $return['http_code']);
     }
 
     /**
@@ -44,9 +66,17 @@ class PropertyController extends Controller
      */
     public function show($id)
     {
-        $property = $this->service->getOne($id);
+        $return = [
+            'http_code' => 200
+        ];
+
+        try {
+            $return['data'] = $this->service->getOne($id);
+        } catch (\Exception $e) {
+            $return = parent::errorMessage($e->getCode());
+        }
         
-        return response()->json($property, 200);
+        return response()->json($return, $return['http_code']);
     }
 
     /**
@@ -58,7 +88,18 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $return = [
+            'http_code' => 200,
+            'message' => 'Property updated successfully'
+        ];
+
+        try {
+            $this->service->save($request->all(), $id);
+        } catch(\Exception $e) {    
+            $return = parent::errorMessage($e->getCode());   
+        }
+
+        return response()->json($return, $return['http_code']);
     }
 
     /**
@@ -69,6 +110,16 @@ class PropertyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $return = [
+            'http_code' => 204
+        ];
+
+        try {
+            $this->service->delete($id);
+        } catch (\Exception $e) {
+            $return = parent::errorMessage($e->getCode());   
+        }
+
+        return response()->json([], $return['http_code']);
     }
 }

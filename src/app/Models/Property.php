@@ -10,6 +10,18 @@ class Property extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'address',
+        'bedrooms',
+        'bathrooms',
+        'total_area',
+        'purchased',
+        'value',
+        'discount',
+        'owner_id',
+        'expired'
+    ];
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');

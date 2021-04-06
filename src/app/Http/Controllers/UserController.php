@@ -117,6 +117,6 @@ class UserController extends Controller
             $return = parent::errorMessage($e->getCode());   
         }
 
-        return response()->json($return, $return['http_code']);
+        return response()->json([], $return['http_code']);
     }
 }
