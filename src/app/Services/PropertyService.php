@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Property;
-use App\Services\Interfaces\PropertyInterface;
 use Carbon\Carbon;
+use App\Models\Property;
 use Illuminate\Database\Eloquent\Collection;
+use App\Services\Interfaces\PropertyInterface;
 
 class PropertyService implements PropertyInterface
 {
@@ -23,7 +23,10 @@ class PropertyService implements PropertyInterface
 
     public function getOne(int $id): ?object
     {
-        return $this->model->find($id);
+        $property = $this->model->find($id);
+        $this->checkPropertiesThreeMonths($property, $id);
+
+        return $property;
     }
 
     public function save(array $data, int $id = null): int
@@ -54,5 +57,13 @@ class PropertyService implements PropertyInterface
         $query = $this->model->where(['owner_id' => $ownerId, 'purchased' => false])->get()->count();
         
         return $query === 3 ? $query : null;
+    }
+
+    public function checkPropertiesThreeMonths(object &$property, int $id)
+    {
+        if(!$property['expired'] && Carbon::now()->subMonths(3)->gt(Carbon::parse($property['created_at']))){
+            $property['expired'] = 1;
+            $this->save(['expired' => true], $id);
+        }
     }
 }
