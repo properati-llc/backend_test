@@ -45,4 +45,9 @@ class UserService implements UserInterface
     {
         return $this->model->destroy($id);
     }
+
+    public function getProperties(int $id): ?object
+    {
+        return $this->model->where(['id' => $id])->with('properties')->get();
+    }
 }

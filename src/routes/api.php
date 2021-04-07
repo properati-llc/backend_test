@@ -17,3 +17,5 @@ use App\Http\Controllers\PropertyController;
 
 Route::resource('users', UserController::class);
 Route::resource('properties', PropertyController::class);
+
+Route::get('users/{id}/properties', [UserController::class, 'getProperties'])->name('users.properties');

@@ -111,6 +111,17 @@ class UserController extends Controller
         return $this->jsonResponse([], 204);
     }
 
+    public function getProperties($id)
+    {
+        try {
+            $data['data'] = $this->service->getProperties($id);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getCode());
+        }
+        
+        return $this->jsonResponse($data);
+    }
+
     /**
      * Validation for data passed
      * 
