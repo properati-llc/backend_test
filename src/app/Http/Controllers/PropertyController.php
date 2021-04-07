@@ -113,6 +113,28 @@ class PropertyController extends Controller
     }
 
     /**
+     * Update the purchase info from the propertie passed.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function setPurchased($id, $value)
+    {
+        if(!in_array($value, [0, 1])) {
+            return $this->jsonResponse(['message' => 'Invalid value'], 400);    
+        }
+
+        try {
+            $this->service->save(['purchased' => $value], $id);
+            $data = ['message' => 'Purchased info updated successfully'];
+        } catch(\Exception $e) {    
+            return $this->errorResponse($e->getCode());
+        }
+
+        return $this->jsonResponse($data);
+    }
+
+    /**
      * Validation for data passed
      * 
      * @param Request $request

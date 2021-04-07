@@ -111,6 +111,12 @@ class UserController extends Controller
         return $this->jsonResponse([], 204);
     }
 
+    /**
+     * Display a listing of properties from a specific user.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function getProperties($id)
     {
         try {
