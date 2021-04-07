@@ -24,8 +24,15 @@ class Property extends Model
 
     protected $hidden = ['deleted_at'];
 
+    protected $appends = ['value_with_discount'];
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function getValueWithDiscountAttribute()
+    {
+        return $this->value - ($this->value * ($this->discount/100));
     }
 }
