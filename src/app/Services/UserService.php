@@ -32,10 +32,10 @@ class UserService implements UserInterface
         
         if(!$id) {
             $data['created_at'] = Carbon::now();
-            $user = $this->model::create($data);
+            $user = $this->model->create($data);
             $return = $user['id'];
         } else {
-            $return = $this->model::where('id', $id)->update($data);
+            $return = $this->model->where('id', $id)->update($data);
         }
 
         return $return;

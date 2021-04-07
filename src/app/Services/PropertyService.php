@@ -35,10 +35,10 @@ class PropertyService implements PropertyInterface
             $data['purchased'] = false;
             $data['expired'] = false;
 
-            $property = $this->model::create($data);
+            $property = $this->model->create($data);
             $return = $property['id'];
         } else {
-            $return = $this->model::where('id', $id)->update($data);
+            $return = $this->model->where('id', $id)->update($data);
         }
 
         return $return;
