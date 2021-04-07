@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\Interfaces\PropertyInterface;
-use App\Services\Interfaces\UserInterface;
 use Illuminate\Support\Facades\Validator;
 
 class PropertyController extends Controller
@@ -156,6 +155,17 @@ class PropertyController extends Controller
             $data = ['data' => $validator->errors()];
 
             return $this->jsonResponse($data, 400);
+        }
+
+        $countNotPurchased = $this->service->countPropertiesNotPurchased($request->input('owner_id'));
+        if($countNotPurchased) {
+            if($request->method() === "POST" || ($request->method() === "PUT" && $request->input('purchased') === 0)) {
+                $error = new \stdClass();
+                $error->purchased = ['The owner has the maximum of not purchased properties already'];
+                $data = ['data' => $error];
+                
+                return $this->jsonResponse($data, 400);
+            }
         }
 
         return false;

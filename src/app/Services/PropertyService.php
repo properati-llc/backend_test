@@ -48,4 +48,11 @@ class PropertyService implements PropertyInterface
     {
         return $this->model->destroy($id);
     }
+
+    public function countPropertiesNotPurchased(int $ownerId): ?int
+    {
+        $query = $this->model->where(['owner_id' => $ownerId, 'purchased' => false])->get()->count();
+        
+        return $query === 3 ? $query : null;
+    }
 }
