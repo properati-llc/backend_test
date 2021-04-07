@@ -21,6 +21,8 @@ class User extends Authenticatable
         'email',
     ];
 
+    protected $hidden = ['deleted_at'];
+
     public function properties()
     {
         return $this->hasMany(Property::class, 'owner_id');

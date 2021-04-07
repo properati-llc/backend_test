@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    private $service;
+    private UserInterface $service;
 
     public function __construct(UserInterface $userService)
     {

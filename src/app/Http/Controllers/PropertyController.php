@@ -9,13 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class PropertyController extends Controller
 {
-    private $service;
-    private $userService;
+    private PropertyInterface $service;
 
-    public function __construct(PropertyInterface $propertyService, UserInterface $userInterface)
+    public function __construct(PropertyInterface $propertyService)
     {
         $this->service = $propertyService;
-        $this->userService = $userInterface;
     }
     /**
      * Display a listing of the resource.

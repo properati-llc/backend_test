@@ -22,6 +22,8 @@ class Property extends Model
         'expired'
     ];
 
+    protected $hidden = ['deleted_at'];
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
