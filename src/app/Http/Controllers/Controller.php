@@ -11,12 +11,19 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function errorMessage($errorCode)
+    protected function jsonResponse(array $data = [], int $httpCode = 200)
     {
-        return [
-            'message' => 'Something went wrong...',
-            'error_code' => $errorCode,
-            'http_code' => 500
-        ];
+        return response()->json($data, $httpCode);
+    }
+
+    protected function errorResponse($errorCode = null, $message = null, $httpCode = 500)
+    {
+        $data['message'] = $message ?: 'Something went wrong...';
+        
+        if($errorCode) {
+            $data['error_code'] = $errorCode;
+        }
+
+        return response()->json($data, $httpCode);
     }
 }

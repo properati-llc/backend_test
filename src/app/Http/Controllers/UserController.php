@@ -21,17 +21,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $return = [
-            'http_code' => 200
-        ];
-
         try {
-            $return['data'] = $this->service->getAll();
+            $data['data'] = $this->service->getAll();
         } catch(\Exception $e) {
-            $return = parent::errorMessage($e->getCode());
+            return $this->errorResponse($e->getCode());
         }
 
-        return response()->json($return, $return['http_code']);
+        return $this->jsonResponse($data);
     }
 
     /**
@@ -47,18 +43,14 @@ class UserController extends Controller
             return $validation;
         }
 
-        $return = [
-            'http_code' => 201,
-            'message' => 'User saved successfully'
-        ];
-
         try {
             $this->service->save($request->all());
+            $data = ['message' => 'User saved successfully'];
         } catch(\Exception $e) {    
-            $return = parent::errorMessage($e->getCode());   
+            return $this->errorResponse($e->getCode());
         }
 
-        return response()->json($return, $return['http_code']);
+        return $this->jsonResponse($data, 201);
     }
 
     /**
@@ -69,17 +61,13 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $return = [
-            'http_code' => 200
-        ];
-
         try {
-            $return['data'] = $this->service->getOne($id);
+            $data['data'] = $this->service->getOne($id);
         } catch (\Exception $e) {
-            $return = parent::errorMessage($e->getCode());
+            return $this->errorResponse($e->getCode());
         }
         
-        return response()->json($return, $return['http_code']);
+        return $this->jsonResponse($data);
     }
 
     /**
@@ -96,18 +84,14 @@ class UserController extends Controller
             return $validation;
         }
 
-        $return = [
-            'http_code' => 200,
-            'message' => 'User updated successfully'
-        ];
-
         try {
             $this->service->save($request->all(), $id);
+            $data = ['message' => 'User updated successfully'];
         } catch(\Exception $e) {    
-            $return = parent::errorMessage($e->getCode());   
+            return $this->errorResponse($e->getCode());   
         }
 
-        return response()->json($return, $return['http_code']);
+        return $this->jsonResponse($data);
     }
 
     /**
@@ -118,17 +102,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $return = [
-            'http_code' => 204
-        ];
-
         try {
             $this->service->delete($id);
         } catch (\Exception $e) {
-            $return = parent::errorMessage($e->getCode());   
+            return $this->errorResponse($e->getCode());   
         }
 
-        return response()->json([], $return['http_code']);
+        return $this->jsonResponse([], 204);
     }
 
     /**
@@ -141,16 +121,13 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email|unique:users'
+            'email' => 'required|email'
         ]);
 
         if($validator->fails()) {
-            $return = [
-                'http_code' => 400,
-                'data' => $validator->errors()
-            ];
+            $data = ['data' => $validator->errors()];
 
-            return response()->json($return, $return['http_code']);
+            return $this->jsonResponse($data, 400);
         }
 
         return false;
