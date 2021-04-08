@@ -15,8 +15,20 @@ use App\Http\Controllers\PropertyController;
 |
 */
 
+Route::get('/', function() {
+    return response()->json([
+        'message' => 'Welcome to Casafy'
+    ], 200);
+});
+
 Route::resource('users', UserController::class);
 Route::resource('properties', PropertyController::class);
 
 Route::get('users/{id}/properties', [UserController::class, 'getProperties'])->name('users.properties');
 Route::patch('properties/{id}/purchased/{value}', [PropertyController::class, 'setPurchased'])->name('properties.purchased');
+
+Route::fallback(function() {
+    return response()->json([
+        'message' => 'Endpoint not found'
+    ], 404);
+});
