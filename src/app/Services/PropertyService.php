@@ -59,7 +59,7 @@ class PropertyService implements PropertyInterface
         return $query === 3 ? $query : null;
     }
 
-    public function checkPropertiesThreeMonths(object &$property, int $id)
+    public function checkPropertiesThreeMonths(object &$property, int $id): void
     {
         if(!$property['expired'] && Carbon::now()->subMonths(3)->gt(Carbon::parse($property['created_at']))){
             $property['expired'] = 1;
