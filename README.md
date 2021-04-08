@@ -84,3 +84,4 @@ To run the tests.
 ```
 docker exec -it casafy-app php artisan test
 ```
+_PS: After run the tests, the database will be resetted._
