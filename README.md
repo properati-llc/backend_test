@@ -10,6 +10,10 @@ To run this project, you should clone this repository.
 ```bash
 git clone https://github.com/lucascavalcante/backend_test.git
 ```
+Into the folder.
+```bash
+cd backend_test
+```
 Change the branch.
 ```bash
 git checkout lucas-test
